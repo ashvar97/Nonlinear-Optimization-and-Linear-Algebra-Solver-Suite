@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "optimization-suite"
+version = "0.1.0"
+description = "A nonlinear optimization and linear algebra solver suite: Newton/BFGS/Levenberg-Marquardt descent, CG solvers, box-constrained and augmented-Lagrangian methods."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4", "flake8>=7.0"]
+examples = ["matplotlib>=3.7"]
+
+[tool.setuptools]
+packages = ["optimization"]
