@@ -89,11 +89,11 @@ first_neighbor = int(k-1)
 # theoretically, all neighbors could be left of x_min
 # we have to catch this with an initial iteration
 cur_V = _max(np.abs(samples[0] - samples[last_neighbor]), np.abs(samples[0] - samples[first_neighbor]))
-next_V = np.Inf
+next_V = np.inf
 if (first_neighbor+1 < n_samples):
     next_V = _max(np.abs(samples[0] - samples[last_neighbor+1]), np.abs(samples[0] - samples[first_neighbor+1]))
 else:
-    next_V = np.Inf
+    next_V = np.inf
 while (cur_V > next_V):
     last_neighbor = last_neighbor + 1
     first_neighbor = first_neighbor + 1
@@ -101,7 +101,7 @@ while (cur_V > next_V):
     if (first_neighbor+1 < n_samples):
         next_V = _max(np.abs(samples[0] - samples[last_neighbor+1]), np.abs(samples[0] - samples[first_neighbor+1]))
     else:
-        next_V = np.Inf
+        next_V = np.inf
 
 # now calculate the density in the domain of knn_pdf
 for i in range(n_bins):
@@ -118,7 +118,7 @@ for i in range(n_bins):
             if (first_neighbor+1 < n_samples):
                 next_V = _max(np.abs(cur_pos - samples[last_neighbor+1]), np.abs(cur_pos - samples[first_neighbor+1]))
             else:
-                next_V = np.Inf
+                next_V = np.inf
     knn_pdf[i] = k/((cur_V+0.001) * n_samples)
 
 knn_pdf = knn_pdf / np.sum(knn_pdf)

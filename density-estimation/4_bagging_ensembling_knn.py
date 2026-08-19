@@ -41,11 +41,11 @@ def get_knn_pdf(k, training):
     # theoretically, all neighbors could be left of x_min
     # we have to catch this with an initial iteration
     cur_V = _max(np.abs(training[0] - training[last_neighbor]), np.abs(training[0] - training[first_neighbor]))
-    next_V = np.Inf
+    next_V = np.inf
     if (first_neighbor+1 < n_samples):
         next_V = _max(np.abs(training[0] - training[last_neighbor+1]), np.abs(training[0] - training[first_neighbor+1]))
     else:
-        next_V = np.Inf
+        next_V = np.inf
     while (cur_V > next_V):
         last_neighbor = last_neighbor + 1
         first_neighbor = first_neighbor + 1
@@ -53,7 +53,7 @@ def get_knn_pdf(k, training):
         if (first_neighbor+1 < n_samples):
             next_V = _max(np.abs(training[0] - training[last_neighbor+1]), np.abs(training[0] - training[first_neighbor+1]))
         else:
-            next_V = np.Inf
+            next_V = np.inf
 
     # now calculate the density in the domain of knn_pdf
     for i in range(n_bins):
@@ -70,7 +70,7 @@ def get_knn_pdf(k, training):
                 if (first_neighbor+1 < n_samples):
                     next_V = _max(np.abs(cur_pos - training[last_neighbor+1]), np.abs(cur_pos - training[first_neighbor+1]))
                 else:
-                    next_V = np.Inf
+                    next_V = np.inf
         knn_pdf[i] = k/((cur_V+0.001) * n_samples)
 
     return (knn_pdf / np.sum(knn_pdf), step_width)
@@ -112,6 +112,7 @@ x_min = 0
 x_max = 10
 
 num_samples = 200
+bagging_percentage = 0.5
 
 
 # homoscedastic noise
@@ -135,17 +136,19 @@ for i in range(1,np.shape(ground_truth_y)[0]):
 # discretization; better safe than sorry:
 cdf = cdf / cdf[-1]
  
+base_dataset = draw_dataset(cdf, ground_truth_x, int(num_samples/bagging_percentage), sigma) 
 
 k_range = np.array(range(3,40))
 log_likelihoods = np.zeros(k_range.shape[0])
 
 for k in k_range:
 
-    # i.i.d. ensembling means that we average training data
-    training = draw_dataset(cdf, ground_truth_x, num_samples, sigma) 
+    # i.d. ensembling means that we draw only a bagged subset from our data
+    rng = np.random.default_rng()
+    training = rng.permutation(base_dataset)[0:num_samples]
     (avg_knn_pdf, step_width) = get_knn_pdf(k, training)
     for i in range(19):
-        training = draw_dataset(cdf, ground_truth_x, num_samples, sigma) 
+        training = rng.permutation(base_dataset)[0:num_samples]
         (tmp_knn_pdf, step_width) = get_knn_pdf(k, training)
         avg_knn_pdf = avg_knn_pdf + tmp_knn_pdf
     knn_pdf = avg_knn_pdf / 20    

@@ -4,7 +4,7 @@
 %           he ------- Elementlaenge / element length
 %           EI ------- Biegesteifigkeit / bending stiffness
 %           q -------- Streckenlast / line load
-function[KE,FE] = elem_1d(X,he,EI,q)
+function[KE,FE] = elem_balken(X,he,EI,q)
 % element stiffness matrix
 KE = 2*EI/he^3* [   6       3*he        -6      3*he;...
                     3*he    2*he^2      -3*he   he^2;...
