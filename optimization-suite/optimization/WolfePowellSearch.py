@@ -86,15 +86,25 @@ def WolfePowellSearch(f, x: np.array, d: np.array, sigma=1.0e-3, rho=1.0e-2, ver
 
         if not W1:
             upper_bound_step = t
-            t = (lower_bound_step + t) / 2
+            t_next = (lower_bound_step + t) / 2
         elif not W2:
             lower_bound_step = t
             if np.isinf(upper_bound_step):
-                t = 2 * t
+                t_next = 2 * t
             else:
-                t = (t + upper_bound_step) / 2
+                t_next = (t + upper_bound_step) / 2
         else:
             break
+
+        # Bisection can only halve the bracket [lower_bound_step, upper_bound_step] so many
+        # times before floating-point precision collapses it to a single representable value
+        # (t_next == t). That happens near a near-stationary point where `descent` -- and hence
+        # both Wolfe-Powell thresholds -- is itself only floating-point noise away from zero, so
+        # neither condition can ever be satisfied exactly. Without this check the loop above
+        # spins forever; accept the current t once it can no longer move.
+        if t_next == t:
+            break
+        t = t_next
 
 
     if verbose:

@@ -1,7 +1,23 @@
 # Nonlinear Optimization and Linear Algebra Solver Suite
 
-Four independent university-coursework projects, kept in one repository, all ultimately about
-turning a mathematical model into a linear or nonlinear system and solving it numerically:
+Five projects, kept in one repository, all ultimately about turning a mathematical model into a
+linear or nonlinear system and solving it numerically -- four independent university-coursework
+projects, plus one new piece connecting two of them together.
+
+## [`nonlinear-fem/`](nonlinear-fem/) -- where the repo's name actually comes together
+
+A materially nonlinear 1D truss, solved by minimizing total potential energy with
+`optimization-suite`'s own `NewtonDescent`/`BFGSDescent` -- the one thing the repository's name
+promises (nonlinear optimization *and* a linear-algebra/FEM solver suite, working together) that
+nothing else here delivers: `fem-truss-beam-solver/` only ever solves linear `K*d=F` systems
+directly, because its elements are all linear-elastic. This is what replaces that direct solve
+once an element's force law stops being a straight line. Verified 4 independent ways (closed-form
+cubic root, the linear-limit series-spring formula, agreement between Newton and BFGS, and an
+independent from-scratch Newton-Raphson solver) -- 8/8 tests passing. Building it also surfaced
+and fixed a genuine latent bug in `optimization-suite/optimization/WolfePowellSearch.py` (an
+unguarded bisection loop that could spin forever near a converged point); all 46 of
+`optimization-suite`'s pre-existing tests still pass unchanged. See
+[`nonlinear-fem/README.md`](nonlinear-fem/README.md).
 
 ## [`optimization-suite/`](optimization-suite/) -- start here
 
