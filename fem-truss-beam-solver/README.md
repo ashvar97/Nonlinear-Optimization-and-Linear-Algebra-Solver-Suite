@@ -7,7 +7,10 @@ analytical solutions before being folded into this repo.
 
 Both solvers follow the same textbook FEM pattern used by `optimization-suite/`'s linear-algebra
 routines: discretize -> assemble a global stiffness matrix `K` and load vector `F` element by
-element -> solve the resulting linear system `K*d = F` under Dirichlet boundary conditions.
+element -> solve the resulting linear system `K*d = F` under Dirichlet boundary conditions. They
+share one `solveq.m` for that last step (originally two copy-pasted, functionally-identical
+copies — `solveq.m` and `SP_solveq.m` — consolidated into one, since eliminating Dirichlet DOFs
+from a linear system doesn't depend on which element type produced `K`/`F`).
 
 ## Two solvers
 
@@ -18,7 +21,7 @@ Supports **linear** (2-node) or **quadratic** (3-node) 1D elements.
 
 - `SP_stab_diskret.m` — mesh generation: node coordinates, connectivity, Dirichlet BCs.
 - `SP_elem_1d.m` — element stiffness matrix and load vector (linear or quadratic).
-- `SP_solveq.m` — solves `K*d = F` with the fixed-end Dirichlet BCs eliminated.
+- `solveq.m` — solves `K*d = F` with the fixed-end Dirichlet BCs eliminated (shared, see above).
 - `SP_main_stab_1d.m` — driver script: prompts for mesh size / element order / load, assembles,
   solves, plots the numerical solution and stresses against the analytical solution.
 
@@ -34,7 +37,7 @@ moment `M`, using 2-node Bernoulli beam elements (2 DOF/node: deflection + rotat
 
 - `balken_diskret.m` — mesh generation for the beam.
 - `elem_balken.m` — Bernoulli beam element stiffness matrix and consistent load vector.
-- `solveq.m` — solves `K*d = F` with the clamped-end Dirichlet BCs eliminated.
+- `solveq.m` — solves `K*d = F` with the clamped-end Dirichlet BCs eliminated (shared, see above).
 - `main_balken.m` — driver script: prompts for element count and loading, assembles, solves,
   plots the numerical deflection against the analytical beam solution.
 
@@ -62,7 +65,7 @@ Each prints/plots the numerical solution against the analytical one for direct c
 To drive either solver non-interactively (e.g. for scripting or regression checks), call the
 underlying functions directly instead of the driver script — see the verification snippets
 above for the exact call sequence (`*_diskret` -> loop assembling `*_elem_*`/`elem_balken` into
-`K`/`F` -> `solveq`/`SP_solveq`).
+`K`/`F` -> `solveq`).
 
 ## License
 

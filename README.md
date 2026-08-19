@@ -31,9 +31,11 @@ Python scripts for nonparametric density estimation (k-NN and Parzen/kernel wind
 likelihood-based hyperparameter selection, and two ensembling strategies (IID resampling and
 bootstrap aggregating). Hyperparameter selection here -- choosing `k` or the bandwidth `h` by
 maximizing held-out log-likelihood -- is itself a small optimization problem, in the same spirit
-as `optimization-suite/`. All eight scripts were run end-to-end and verified error-free; one real
-compatibility bug was found and fixed (`np.Inf`, removed in NumPy 2.0, updated to `np.inf` in the
-four `*_knn.py` scripts). See [`density-estimation/README.md`](density-estimation/README.md).
+as `optimization-suite/`. Originally 8 scripts that were ~90% copy-pasted boilerplate (a KNN and
+a Parzen variant of each stage); consolidated into a shared module plus one script per stage, all
+run end-to-end and verified error-free. One real compatibility bug was found and fixed along the
+way (`np.Inf`, removed in NumPy 2.0, updated to `np.inf`). See
+[`density-estimation/README.md`](density-estimation/README.md).
 
 ## [`hpc-code/`](hpc-code/)
 

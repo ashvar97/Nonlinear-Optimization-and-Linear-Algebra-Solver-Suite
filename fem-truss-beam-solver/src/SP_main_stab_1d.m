@@ -66,7 +66,7 @@ end
 % solution of the system of equations
 % Einbau der Dirichlet Randbedingungen
 % applying Dirichlet bcs
-[u,Q] = SP_solveq(K,F,bc)
+[u,Q] = solveq(K,F,bc)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nachlaufrechnung, Spannungen
